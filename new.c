@@ -1,44 +1,38 @@
+// this is the branch to check balance
 #include <stdio.h>
+#include <string.h>
 
-void transfer_money() {
-    int sender_ac;
-    int receiver_ac;
-    int trans_amt;
-    int pin;
-    int sender_pin = 5566;
-    int sender_balance = 100000;
-    
-    printf("Enter sender account number: ");
-    scanf("%d", &sender_ac);
-    
-    printf("Enter receiver account number: ");
-    scanf("%d", &receiver_ac);
-    
-    printf("Enter the amount to transfer: ");
-    scanf("%d", &trans_amt);
-    
-    if (trans_amt > sender_balance) {
-        printf(" Oppps! Insufficient Balance. Transaction Failed.\n");
-        return;
+void banking_login()
+{
+    FILE *fp;
+    char username[50];
+    fp = fopen("banking.txt", "r");
+    if (fp == NULL)
+    {
+        printf("error opening \n try again");
     }
-    
-    printf("Enter your PIN: ");
-    scanf("%d", &pin);
-if (pin != sender_pin) {
-        printf("Invalid PIN. Transaction Failed, Pleases try again with thr right pin. Thnak You\n");
-        return;
-    }
-    
-    sender_balance -= trans_amt;
-    printf("Money Transferred Successfully!\n");
-    printf("Current balance is : %d\n", sender_balance);
+
+    printf("enter the username ");
+    scanf("%s", &username);
+
+    checkbalance(fp, username);
+
+    fclose(fp);
 }
 
-int main() {
-    printf("WELCOME TO YOUR FINANCE Service Department:\n");
-    printf("Please have patience till your transaction is completed. :\n");
-    transfer_money();
-    printf("Thank you for using our Financial Service Department. Visit Again!\n");
-    
-return 0;
+void checkbalance(FILE *fp, const char *username)
+{
+    char storeduser_name[50];
+    float balance;
+
+    rewind(fp);
+    while (fscanf(fp, "%s%f", storeduser_name, &balance) != EOF)
+    {
+        if (strcmp(storeduser_name, username) == 0)
+        {
+            printf("your balance in this account is %.2f", balance);
+            return;
+        }
+    }
+    printf("user not found");
 }
