@@ -3,7 +3,7 @@ char name[20];
     int dpt_amount,amount=10000,acc_no,choice;
 
 void menu();
-// void check_balance();
+void check_balance();
 void deposite_money();
 void withdraw_money();
 // void transfer_money();
@@ -26,8 +26,13 @@ int main(){
      deposite_money();
         break;
      case 2:
+
      withdraw_money();
         break;
+
+    //  check_balance();
+    // //     break;
+
     //  case 3:
     //  transfer_money();
     //     break;
