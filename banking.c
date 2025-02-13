@@ -1,4 +1,6 @@
 #include <stdio.h>
+#include <string.h>
+
 char name[20];
 int dpt_amount, amount = 10000, acc_no, choice;
 
@@ -8,63 +10,68 @@ void deposite_money();
 void withdraw_money();
 void transfer_money();
 
-int main()
-{
+typedef struct {
+    int accountNumber;
+    double balance;
+} Account;
 
-    printf("enter you name");
+// Function to check the balance of an account
+double check_Balance(Account account) {
+    return account.balance;
+}
+
+int main() {
+    printf("Enter your name: ");
     gets(name);
-    printf("enter your account number");
+    printf("Enter your account number: ");
     scanf("%d", &acc_no);
 
-    menu();
-    printf("enter your choice");
-    scanf("%d", &choice);
+    while (1) {
+        menu();
+        printf("Enter your choice: ");
+        scanf("%d", &choice);
 
-    switch (choice)
-    {
-    case 1:
-        deposite_money();
-        break;
-
-    case 2:
-        withdraw_money();
-        break;
-
-    case 3:
-        transfer_money();
-        break;
-
-
-     case 4:
-         check_balance();
-            break;
-
-    default:
-        printf("invalid choice");
-        break;
+        switch (choice) {
+            case 1:
+                deposite_money();
+                break;
+            case 2:
+                withdraw_money();
+                break;
+            case 3:
+                transfer_money();
+                break;
+            case 4:
+                check_balance();
+                break;
+            case 5:
+                printf("Exiting...\n");
+                return 0;
+            default:
+                printf("Invalid choice\n");
+                break;
+        }
     }
 
     return 0;
 }
 
-void menu()
-{
-    printf("1. deposit\n");
-    printf("2. withdraw\n");
-    printf("3.transfer balance\n");
-    printf("4. check balance\n");
-    printf("5. exit\n");
+void menu() {
+    printf("1. Deposit\n");
+    printf("2. Withdraw\n");
+    printf("3. Transfer balance\n");
+    printf("4. Check balance\n");
+    printf("5. Exit\n");
 }
-void deposite_money()
-{
-    printf("enter the amount you want to deposite");
+
+void deposite_money() {
+    printf("Enter the amount you want to deposit: ");
     scanf("%d", &dpt_amount);
     amount += dpt_amount;
-    printf("your balance is %d", amount);
+    printf("Your balance is %d\n", amount);
 }
-// subha ko part
-void withdraw_money()
-{
+
+void withdraw_money() {
     float balance = 1000.00;
     float withdrawAmount;
     char choice;
@@ -73,10 +80,8 @@ void withdraw_money()
     printf("Welcome to the Bank!\n");
     printf("Your current balance is: %.2f\n", balance);
 
-    do
-    {
-        if (blocked)
-        {
+    do {
+        if (blocked) {
             printf("Your account is temporarily blocked due to suspension.\n");
             break;
         }
@@ -84,33 +89,23 @@ void withdraw_money()
         printf("Enter the amount to withdraw: ");
         scanf("%f", &withdrawAmount);
 
-        if (withdrawAmount > balance)
-        {
+        if (withdrawAmount > balance) {
             printf("Insufficient funds! Your balance is %.2f\n", balance);
-        }
-        else if (withdrawAmount <= 0)
-        {
+        } else if (withdrawAmount <= 0) {
             printf("Invalid amount! Please enter a positive number.\n");
-        }
-        else if (withdrawAmount >= balance * 0.8)
-        {
+        } else if (withdrawAmount >= balance * 0.8) {
             blocked = 1;
             printf("Security alert!.\n");
             printf("Your account has been temporarily blocked due to suspension. Please contact customer service.\n");
-        }
-        else
-        {
+        } else {
             balance -= withdrawAmount;
             printf("Withdrawal successful! Your new balance is %.2f\n", balance);
         }
 
-        if (!blocked)
-        {
+        if (!blocked) {
             printf("Do you want another transaction? (y/n): ");
             scanf(" %c", &choice);
-        }
-        else
-        {
+        } else {
             choice = 'n';
         }
 
@@ -119,9 +114,7 @@ void withdraw_money()
     printf("Thank you for using our bank!\n");
 }
 
-// nirjala and suman ko part
-void transfer_money()
-{
+void transfer_money() {
     int sender_ac;
     int receiver_ac;
     int trans_amt;
@@ -138,17 +131,15 @@ void transfer_money()
     printf("Enter the amount to transfer: ");
     scanf("%d", &trans_amt);
 
-    if (trans_amt > sender_balance)
-    {
-        printf(" Oppps! Insufficient Balance. Transaction Failed.\n");
+    if (trans_amt > sender_balance) {
+        printf("Oppps! Insufficient Balance. Transaction Failed.\n");
         return;
     }
 
     printf("Enter your PIN: ");
     scanf("%d", &pin);
-    if (pin != sender_pin)
-    {
-        printf("Invalid PIN. Transaction Failed, Pleases try again with thr right pin. Thnak You\n");
+    if (pin != sender_pin) {
+        printf("Invalid PIN. Transaction Failed, Please try again with the right pin. Thank You\n");
         return;
     }
 
@@ -157,37 +148,11 @@ void transfer_money()
     printf("Current balance is : %d\n", sender_balance);
 }
 
-// void banking_login()
-// {
-//     FILE *fp;
-//     char username[50];
-//     fp = fopen("banking.txt", "r");
-//     if (fp == NULL)
-//     {
-//         printf("error opening \n try again");
-//     }
+void check_balance() {
+    Account myAccount;
+    myAccount.accountNumber = acc_no;
+    myAccount.balance = amount;
 
-//     printf("enter the username ");
-//     scanf("%s", &username);
-
-//     checkbalance(fp, username);
-
-//     fclose(fp);
-// }
-
-// void check_balance(FILE *fp, const char *username)
-// {
-//     char storeduser_name[50];
-//     float balance;
-
-//     rewind(fp);
-//     while (fscanf(fp, "%s%f", storeduser_name, &balance) != EOF)
-//     {
-//         if (strcmp(storeduser_name, username) == 0)
-//         {
-//             printf("your balance in this account is %.2f", balance);
-//             return;
-//         }
-//     }
-//     printf("user not found");
-// }
+    double balance = check_Balance(myAccount);
+    printf("The balance for account number %d is: $%.2f\n", myAccount.accountNumber, balance);
+}
